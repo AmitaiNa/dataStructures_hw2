@@ -24,3 +24,5 @@ class RecordsCompany {
 };
 
 #endif
+
+// TODO client needs to have a comparator
