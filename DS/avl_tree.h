@@ -40,7 +40,7 @@ public:
 template <class T, class Compare = Custom_less<T>>    //__compare(left, right) = return (left < right)
 class AVL_Tree
 {
-private:
+protected:
 
     class COMPARE_WITH_KEY_NON_ARITHMETIC{};
 
@@ -195,7 +195,7 @@ public:
     /**
 		D'tor of the avl tree.
     */
-    ~AVL_Tree();
+    virtual ~AVL_Tree();
 
     /**
 		Find an entity in the tree and return ptr to it's data.
@@ -235,7 +235,7 @@ public:
         @retval ptr to the entity or nullptr if it already exists in the tree.
         @return ptr to the entity inserted if successful else nullptr.
     */ 
-    T* insert(const T& entity);
+    virtual T* insert(const T& entity);
    
     /**
 		Remove an entity from the tree. call for re-balancing if necessary.
@@ -744,7 +744,7 @@ T* AVL_Tree<T, Compare>::pop_max()
     return object_to_pop;
 }
 
-//private:
+//protected:
 
 template <class T, class Compare>
 Linked_List<typename AVL_Tree<T, Compare>::Tree_Node*> AVL_Tree<T, Compare>::traverse_by_entity(const T& entity)

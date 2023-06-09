@@ -24,6 +24,3 @@ class RecordsCompany {
 };
 
 #endif
-
-// TODO client needs to have a cast to int operator for use with avl trees, and for HT resize.
-// TODO client needs to have a cpy c'to for pop_max().
