@@ -8,12 +8,19 @@ class hash_table
 {
 
     AVL_Tree<T>** __array;
-    int __size;
-    int __capacity;
+    int __size;     // total number of objects in the HT.
+    int __capacity;     // maximum capacity of the array.
 
     const int INITIAL_HT_CAPACITY = 8;
-    const double MAX_LOAD_FACTOR = 0.5; // when the hash table's load factor gets bigger than the max, the table gets resized.
+    const double MAX_LOAD_FACTOR = 0.75; // when the hash table's load factor gets bigger than the max, the table gets resized.
     const int RESIZE_FACTOR = 2; // the factor by which to scale the array when resizing.
+
+    // exception for unexpected behaviour from resize.
+    class POPPED_EMPTY_TREE{};
+    // exception for failed insertion to tree.
+    class TREE_INSERTION_FAILED{};
+    // exception for passing nullptr to initialize_pointer_array.
+    class INVALID_ARGUMENT{};
 
     /**
         Returns the given key's corresponding index in the table array.
@@ -27,20 +34,55 @@ class hash_table
 
     /**
         Doubles the size of the hash table's array.
+        @exception POPPED_EMPTY_TREE - popped an empty tree.
+        @exception TREE_INSERTION_FAILED - inserted an object that already exists.
     */
     void resize()
     {
-        int new_size = __capacity*RESIZE_FACTOR;
-        AVL_Tree<T>** new_array = new AVL_Tree<T>*[new_size];
-        for (int i = 0; i < __size; ++i)
+        int old_capacity = __capacity;
+        __capacity *= RESIZE_FACTOR;
+        AVL_Tree<T>** new_array = new AVL_Tree<T>*[__capacity];
+        initialize_pointer_array(new_array, __capacity);
+        for (int i = 0; i < old_capacity; ++i)
         {
-            new_array[i] = __array[i];
-            __array[i] = nullptr;   // needed so the following "delete[]" won't delete the objects in the trees, but only the allocated memory.
-            new_array[new_size-i-1] = nullptr; // TODO can be removed when everything is working. inserted for easier debugging.
+            while (__array[i] != nullptr || __array[i]->AVL_Tree<T>::get_size() != 0)
+            {
+                T* relocated_T_ptr = __array[i]->AVL_Tree<T>::pop_max();
+                if (relocated_T_ptr == nullptr)
+                {
+                    throw POPPED_EMPTY_TREE();   // shouldn't get here. popped an empty tree.
+                }
+                int new_index = get_hashed_index(*relocated_T_ptr);
+                if (new_array[new_index == nullptr])    // first object to be inserted into the array cell.
+                {
+                    new_array[new_index] = new AVL_Tree();
+                }
+                if (new_array[new_index]->AVL_Tree<T>::insert(*relocated_T_ptr) == nullptr)
+                {
+                    throw TREE_INSERTION_FAILED();   // shouldn't get here. inserted an object that already exists.
+                }
+            }
         }
         delete[] __array;
         __array = new_array;
-        __capacity *= RESIZE_FACTOR;
+    }
+
+    /**
+        Initializes the given array of pointers to nullptr.
+        @param array A pointer to the start of the array to be initialized.
+        @param size The size of the given array.
+        @exception INVALID_ARGUMENT - received nullptr in array.
+    */
+    void initialize_pointer_array(void* array, int size)
+    {
+        if (array = nullptr)
+        {
+            throw INVALID_ARGUMENT();   // shouldn't get here. received nullptr in array.
+        }
+        for (int i = 0; i < size; ++i)
+        {
+            array[i] = nullptr;
+        }
     }
 
 public:
@@ -50,10 +92,7 @@ public:
     */
     hash_table() : __array(new AVL_Tree<T>*[INITIAL_HT_CAPACITY]), __size(0), __capacity(INITIAL_HT_CAPACITY)
     {
-        for (int i = 0; i < INITIAL_HT_CAPACITY; ++i)
-        {
-            __array[i] = nullptr; // TODO can be removed when everything is working. inserted for easier debugging.
-        }
+        initialize_pointer_array(__array, INITIAL_HT_CAPACITY);
     }
 
     /**
@@ -82,10 +121,15 @@ public:
     */
     T* insert(const T& object, int key)
     {
-        T* retval = __array[get_hashed_index(key)].AVL_Tree<T>::insert(object);
-        if (retval == nullptr)
+        int hashed_index = get_hashed_index(key);
+        if (__array[hashed_index == nullptr])   // first object to be inserted into the array cell.
         {
-            return nullptr;     // key already exists.
+            __array[hashed_index] = new AVL_Tree<T>();
+        }
+        T* retval = __array[hashed_index].AVL_Tree<T>::insert(object);
+        if (retval == nullptr)     // key already exists.
+        {
+            return nullptr;
         }
         ++__size;
         if (__size/__capacity > MAX_LOAD_FACTOR)    // check if resizing is needed.
