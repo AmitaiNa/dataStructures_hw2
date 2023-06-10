@@ -71,7 +71,17 @@ public:
         @retval The front will contain nullptr if the customer is not found.
         @return A list of nodes and the sum of discounts in the search path.
     */
-    path_discount_Output member_traverse_by_customer(const Customer& customer);
+    path_discount_Output member_traverse_by_customer(const Customer& customer) const;
+
+    /**
+		Creates a list of node that lead to the requested customer. along the way, sums the discounts of every member in the search path.
+        @param key The customer's key to find.
+        @retval A tuple which contains the nodes leading to the requested customer (arranged like a stack - requested
+        node is in the front, root n the back), and the sum of all the member's discounts that are in the search path.
+        @retval The front will contain nullptr if the customer is not found.
+        @return A list of nodes and the sum of discounts in the search path.
+    */
+    path_discount_Output member_traverse_by_key(int key) const;
 
     /**
 		Find the lowest common ancestor of the given keys.

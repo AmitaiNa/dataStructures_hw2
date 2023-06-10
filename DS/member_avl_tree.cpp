@@ -3,14 +3,14 @@
 Member_AVL_Tree::Member_AVL_Tree() : AVL_Tree<Customer>()
 {}
 
-Member_AVL_Tree::path_discount_Output Member_AVL_Tree::member_traverse_by_customer(const Customer& customer)
+Member_AVL_Tree::path_discount_Output Member_AVL_Tree::member_traverse_by_customer(const Customer& customer) const
 {
     Linked_List<AVL_Tree<Customer>::Tree_Node*> path;
     double cumulative_discount = 0;
     AVL_Tree<Customer>::Tree_Node* current_node = __root;
     while (current_node != nullptr)
     {
-        cumulative_discount += customer.get_member_discount();
+        cumulative_discount += current_node->__data.get_member_discount_component();
         path.push_front(current_node);
         if (__compare(current_node->__data, customer)) // customer is greater than the current node.
         {
@@ -27,6 +27,32 @@ Member_AVL_Tree::path_discount_Output Member_AVL_Tree::member_traverse_by_custom
     }
     path.push_front(current_node);               //
     return path_discount_Output(path);           // requested customer not found.
+}
+
+Member_AVL_Tree::path_discount_Output Member_AVL_Tree::member_traverse_by_key(int key) const
+{
+    Linked_List<AVL_Tree<Customer>::Tree_Node*> path;
+    double cumulative_discount = 0;
+    AVL_Tree<Customer>::Tree_Node* current_node = __root;
+    while (current_node != nullptr)
+    {
+        cumulative_discount += current_node->__data.get_member_discount_component();
+        path.push_front(current_node);
+        if (__compare(current_node->__data, key)) // key is greater than the current node.
+        {
+            current_node = current_node->__right; //go right.
+        }
+        else if (__compare(key, current_node->__data)) // key is smaller than the current node.
+        {
+            current_node = current_node->__left; //go left.
+        }
+        else                                     // key is equal to the current node.
+        {
+            return path_discount_Output(path, cumulative_discount);     // key found.
+        }
+    }
+    path.push_front(current_node);              //
+    return path_discount_Output(path);          // requested key not found.
 }
 
 Member_AVL_Tree::Tree_Node* Member_AVL_Tree::find_lowest_common_ancestor(int id1, int id2) const
@@ -76,7 +102,7 @@ Customer* Member_AVL_Tree::insert(const Customer& customer)
         __root = new Tree_Node(customer); //insert to root.
         direct_ptr_to_data = &__root->__data;
         __size++;
-        direct_ptr_to_data->set_member_discount(-cumulative_discount);    // added to update the inserted member's discount.
+        direct_ptr_to_data->set_member_discount_component(-cumulative_discount);    // added to update the inserted member's discount.
         return direct_ptr_to_data;
     }
 
@@ -136,12 +162,12 @@ Customer* Member_AVL_Tree::insert(const Customer& customer)
             }
             else    // father is root
                 __root = new_son;
-            direct_ptr_to_data->set_member_discount(-cumulative_discount);    // added to update the inserted member's discount.
+            direct_ptr_to_data->set_member_discount_component(-cumulative_discount);    // added to update the inserted member's discount.
             return direct_ptr_to_data;
         }
         update_height(current_node);
     }
-    direct_ptr_to_data->set_member_discount(-cumulative_discount);    // added to update the inserted member's discount.
+    direct_ptr_to_data->set_member_discount_component(-cumulative_discount);    // added to update the inserted member's discount.
     return direct_ptr_to_data;
 }
 
@@ -159,18 +185,6 @@ void Member_AVL_Tree::add_discount(int id1, int id2, double amount) const
     Member_AVL_Tree::Tree_Node* current_node = common_ancestor->__right;
     while (current_node != nullptr)
     {
-        if (current_node->__data == id2) // found id2
-        {
-            if (!has_discount)
-            {
-                current_node->__data.add_discount(amount);
-            }
-            if (current_node->__right != nullptr)                       // only relevant for left.
-            {
-                current_node->__right->__data.add_discount(-amount);
-            }
-            break;
-        }
         if (current_node->__data < id2) // need to go right.
         {
             if (!has_discount)
@@ -180,7 +194,7 @@ void Member_AVL_Tree::add_discount(int id1, int id2, double amount) const
             }
             current_node = current_node->__right;
         }
-        else    // need to go left.
+        else                            // need to go left.
         {
             if (has_discount)
             {
@@ -190,11 +204,54 @@ void Member_AVL_Tree::add_discount(int id1, int id2, double amount) const
             current_node = current_node->__left;
         }
     }
+
+    // left updates:
+    has_discount = true;
+    current_node = common_ancestor->__left;
+    while (current_node != nullptr)
+    {
+        if (current_node->__data == id1) // found id1. only relevant for left updates.
+        {
+            if (!has_discount)
+            {
+                current_node->__data.add_discount(amount);
+            }
+            if (current_node->__left != nullptr)
+            {
+                current_node->__left->__data.add_discount(-amount);
+            }
+            break;
+        }
+        if (current_node->__data < id1) // need to go right.
+        {
+            if (has_discount)
+            {
+                current_node->__data.add_discount(-amount);
+                has_discount = false;
+            }
+            current_node = current_node->__right;
+        }
+        else    // need to go left.
+        {
+            if (!has_discount)
+            {
+                current_node->__data.add_discount(amount);
+                has_discount = true;
+            }
+            current_node = current_node->__left;
+        }
+    }
 }
 
 double Member_AVL_Tree::get_expenses(int id) const
 {
-    // TODO
+    path_discount_Output path_discount = member_traverse_by_key(id);
+    Tree_Node* target = path_discount.get_path().front();
+    if (target == nullptr || !(target->__data.is_member()))
+    {
+        throw NO_MEMBER_WITH_SUCH_ID();
+    }
+    return target->__data.get_member_debt() - path_discount.get_cumulative_discount();    
 }
 
 Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_LR(Tree_Node* current_node) //current_node = A
@@ -205,17 +262,17 @@ Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_LR(Tree_Node* current_node) 
         //C'=C+B+A
         //B'+ C'= B+A  ->  B'=B+A-C'
         //A'+ C'= A -> A'= A-C'
-        new_root->__data.set_member_discount(new_root->__data.get_member_discount() + left->__data.get_member_discount() + current_node->__data.get_member_discount());
-        left->__data.set_member_discount(left->__data.get_member_discount() + current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
-        current_node->__data.set_member_discount(current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
+        new_root->__data.set_member_discount_component(new_root->__data.get_member_discount_component() + left->__data.get_member_discount_component() + current_node->__data.get_member_discount_component());
+        left->__data.set_member_discount_component(left->__data.get_member_discount_component() + current_node->__data.get_member_discount_component() - new_root->__data.get_member_discount_component());
+        current_node->__data.set_member_discount_component(current_node->__data.get_member_discount_component() - new_root->__data.get_member_discount_component());
         //Y'+B'+C'= Y+C+B+A  -> Y'=Y+C+B+A-B'-C'=Y-B'
         //W'+A'+C'= W+C+B+A  -> W'=W+C+B+A-A'-C'=W-A'
         Tree_Node* Y = new_root->__left;
         Tree_Node* W = new_root->__right;
         if(Y!=nullptr)
-            Y->__data.set_member_discount(Y->__data.get_member_discount() - left->__data.get_member_discount());
+            Y->__data.set_member_discount_component(Y->__data.get_member_discount_component() - left->__data.get_member_discount_component());
         if(W!=nullptr)
-            W->__data.set_member_discount(W->__data.get_member_discount() - current_node->__data.get_member_discount());
+            W->__data.set_member_discount_component(W->__data.get_member_discount_component() - current_node->__data.get_member_discount_component());
     //---------
     left->__right = new_root->__left;    //B->right = C->left (Y)
     new_root->__left = left;    //C->left = B
@@ -234,11 +291,11 @@ Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_LL(Tree_Node* current_node) 
     //---new---
         //B'=B+A
         //A'+ B'= A  ->  A'=A-B'
-        new_root->__data.set_member_discount(new_root->__data.get_member_discount() + current_node->__data.get_member_discount());
-        current_node->__data.set_member_discount(current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
+        new_root->__data.set_member_discount_component(new_root->__data.get_member_discount_component() + current_node->__data.get_member_discount_component());
+        current_node->__data.set_member_discount_component(current_node->__data.get_member_discount_component() - new_root->__data.get_member_discount_component());
         //Y'+A'+B'=Y+B+A  ->  Y'=Y+B+A-B'-A'=Y-A'
         if(mid!=nullptr)
-            mid->__data.set_member_discount(mid->__data.get_member_discount() - current_node->__data.get_member_discount());
+            mid->__data.set_member_discount_component(mid->__data.get_member_discount_component() - current_node->__data.get_member_discount_component());
     //---------
     new_root->__right = current_node;   //B->right = A
     current_node->__left = mid; //A->left = Y
@@ -255,17 +312,17 @@ Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_RL(Tree_Node* current_node) 
         //C'=C+B+A
         //B'+ C'= B+A  ->  B'=B+A-C'
         //A'+ C'= A -> A'= A-C'
-        new_root->__data.set_member_discount(new_root->__data.get_member_discount() + right->__data.get_member_discount() + current_node->__data.get_member_discount());
-        right->__data.set_member_discount(right->__data.get_member_discount() + current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
-        current_node->__data.set_member_discount(current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
+        new_root->__data.set_member_discount_component(new_root->__data.get_member_discount_component() + right->__data.get_member_discount_component() + current_node->__data.get_member_discount_component());
+        right->__data.set_member_discount_component(right->__data.get_member_discount_component() + current_node->__data.get_member_discount_component() - new_root->__data.get_member_discount_component());
+        current_node->__data.set_member_discount_component(current_node->__data.get_member_discount_component() - new_root->__data.get_member_discount_component());
         //Y'+A'+C'= Y+C+B+A  -> Y'=Y+C+B+A-A'-C'=Y-A'
         //W'+B'+C'= W+C+B+A  -> W'=W+C+B+A-B'-C'=W-B'
         Tree_Node* Y = new_root->__left;
         Tree_Node* W = new_root->__right;
         if(Y!=nullptr)
-            Y->__data.set_member_discount(Y->__data.get_member_discount() - current_node->__data.get_member_discount());
+            Y->__data.set_member_discount_component(Y->__data.get_member_discount_component() - current_node->__data.get_member_discount_component());
         if(W!=nullptr)
-            W->__data.set_member_discount(W->__data.get_member_discount() - right->__data.get_member_discount());
+            W->__data.set_member_discount_component(W->__data.get_member_discount_component() - right->__data.get_member_discount_component());
     //---------
     right->__left = new_root->__right;    //B->left = C->right (W)
     new_root->__right = right;    //C->right = B
@@ -284,11 +341,11 @@ Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_RR(Tree_Node* current_node) 
     //---new---
         //B'=B+A
         //A'+ B'= A  ->  A'=A-B'
-        new_root->__data.set_member_discount(new_root->__data.get_member_discount() + current_node->__data.get_member_discount());
-        current_node->__data.set_member_discount(current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
+        new_root->__data.set_member_discount_component(new_root->__data.get_member_discount_component() + current_node->__data.get_member_discount_component());
+        current_node->__data.set_member_discount_component(current_node->__data.get_member_discount_component() - new_root->__data.get_member_discount_component());
         //X'+A'+B'=X+B+A  ->  X'=X+B+A-B'-A'=X-A'
         if(mid!=nullptr)
-            mid->__data.set_member_discount(mid->__data.get_member_discount() - current_node->__data.get_member_discount());
+            mid->__data.set_member_discount_component(mid->__data.get_member_discount_component() - current_node->__data.get_member_discount_component());
     //---------
     new_root->__left = current_node;   //B->left = A
     current_node->__right = mid; //A->right = X
