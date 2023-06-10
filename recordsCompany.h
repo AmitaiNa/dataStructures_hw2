@@ -2,12 +2,16 @@
 #define RECORDS_COMPANY_H
 
 #include "utilesWet2.h"
-
-
+#include "DS/hash_table.h"
+#include "DS/member_avl_tree.h"
+#include "DS/Record_union_DB.h"
 
 class RecordsCompany {
   private:
-    // todo
+    Hash_table<Customer>  __customer_table;
+    Member_AVL_Tree __customer_tree;
+    Record_union_DB *__records_piles;
+    
   public:
     RecordsCompany();
     ~RecordsCompany();

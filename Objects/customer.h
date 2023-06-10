@@ -4,8 +4,8 @@
 class Customer
 {
 
-    int __id;
-    int __phone_number;
+    const int __id;
+    const int __phone_number;
     bool __is_member;
     double __debt;
     double __discount;

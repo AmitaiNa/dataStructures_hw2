@@ -4,7 +4,7 @@
 #include "avl_tree.h"
 
 template <class T>
-class hash_table
+class Hash_table
 {
 
     AVL_Tree<T>** __array;
@@ -80,7 +80,7 @@ public:
     /**
         C'tor for the hash table.
     */
-    hash_table() : __array(new AVL_Tree<T>*[INITIAL_HT_CAPACITY]), __size(0), __capacity(INITIAL_HT_CAPACITY)
+    Hash_table() : __array(new AVL_Tree<T>*[INITIAL_HT_CAPACITY]), __size(0), __capacity(INITIAL_HT_CAPACITY)
     {
         initialize_pointer_array(__array, INITIAL_HT_CAPACITY);
     }
@@ -88,7 +88,7 @@ public:
     /**
         D'tor for the hash table.
     */
-    ~hash_table()
+    ~Hash_table()
     {
         delete[] __array;
     }

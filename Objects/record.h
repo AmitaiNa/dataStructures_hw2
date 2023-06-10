@@ -4,7 +4,7 @@
 class Record
 {
 
-    int __id;
+    const int __id;
     int __purchases;
 
 public:
