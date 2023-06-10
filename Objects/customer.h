@@ -1,7 +1,7 @@
-#ifndef CLIENT_H
-#define CLIENT_H
+#ifndef CUSTOMER_H
+#define CUSTOMER_H
 
-class Client
+class Customer
 {
 
     int __id;
@@ -13,9 +13,9 @@ class Client
 public:
 
     /**
-        C'tor for the client.
+        C'tor for the customer.
     */
-    Client(int id, int phone_number);
+    Customer(int id, int phone_number);
 
     /**
         Getter for the member's discount.
@@ -31,7 +31,7 @@ public:
     void set_member_cumulative_discount_compensation(double calculated_discount);
 
     /**
-        Cast to int operator. returns the client's id.
+        Cast to int operator. returns the customer's id.
         Needed for use with trees.
     */
     operator int() const;

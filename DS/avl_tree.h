@@ -356,14 +356,6 @@ public:
     T* find_max();
 
     /**
-		Pops the biggest entity in the subtree from root, out of the tree. determined by compare class.
-        @retval ptr to the entity or nullptr if it doesn't exists in the tree - empty tree.
-        @return ptr to the max entity if successful else nullptr.
-        @details uses find_max and remove_by_entity. assumes T has a cpy c'tor.
-    */
-   T* pop_max();
-
-    /**
 		Getter for the tree's size.
         @retval The number of entities in the tree
         @return The size of the tree.
@@ -729,19 +721,6 @@ void AVL_Tree<T, Compare>::descending_inorder(int* const output)
         output[index++] = current_node->__data->get_id();
         current_node = current_node->__left;
     }
-}
-
-template <class T, class Compare>
-T* AVL_Tree<T, Compare>::pop_max()
-{
-    T* object_to_pop = find_max();
-    if (object_to_pop = nullptr) // empty tree.
-    {
-        return nullptr;
-    }
-    T* copy = new T(*(object_to_pop)); // creates a copy of the data within the tree node because remove_by_entity() destroys it. assumes T has a cpy c'tor.
-    remove_by_entity(*object_to_pop, false);
-    return object_to_pop;
 }
 
 //protected:
