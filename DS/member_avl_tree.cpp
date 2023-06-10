@@ -149,3 +149,54 @@ void Member_AVL_Tree::add_discount(int id1, int id2, double amount)
 {
 
 }
+
+
+Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_LR(Tree_Node* current_node) //current_node = A
+{
+    Tree_Node* left = current_node->__left;  //save B
+    Tree_Node* new_root = left->__right;    //new_root = C
+    left->__right = new_root->__left;    //B->right = C->left (Y)
+    new_root->__left = left;    //C->left = B
+    current_node->__left = new_root->__right;   //A->left = C->right (W)
+    new_root->__right = current_node;   ////C->right = A
+    update_height(current_node);    //update A
+    update_height(left);    //update B
+    update_height(new_root);    //update C
+    return new_root;
+}
+
+Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_LL(Tree_Node* current_node) //current_node = A
+{
+    Tree_Node* new_root = current_node->__left;    //new_root = B
+    Tree_Node* mid = new_root->__right;  //save Y
+    new_root->__right = current_node;   //B->right = A
+    current_node->__left = mid; //A->left = Y
+    update_height(current_node);    //update a
+    update_height(new_root);    //update B
+    return new_root;
+}
+
+Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_RL(Tree_Node* current_node) //current_node = A
+{
+    Tree_Node* right = current_node->__right;  //save B
+    Tree_Node* new_root = right->__left;    //new_root = C
+    right->__left = new_root->__right;    //B->left = C->right (W)
+    new_root->__right = right;    //C->right = B
+    current_node->__right = new_root->__left;   //A->right = C->left (Y)
+    new_root->__left = current_node;   ////C->left = A
+    update_height(current_node);    //update A
+    update_height(right);    //update B
+    update_height(new_root);    //update C
+    return new_root;
+}
+
+Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_RR(Tree_Node* current_node) //current_node = A
+{
+    Tree_Node* new_root = current_node->__right;    //new_root = B
+    Tree_Node* mid = new_root->__left;  //save X
+    new_root->__left = current_node;   //B->left = A
+    current_node->__right = mid; //A->right = X
+    update_height(current_node);    //update A
+    update_height(new_root);    //update B
+    return new_root;
+}

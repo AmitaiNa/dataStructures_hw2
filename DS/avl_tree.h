@@ -137,28 +137,28 @@ protected:
         @param node The node.
         @retval Tree_Node* to the new son after rotating.
     */
-    Tree_Node* rotate_LR(Tree_Node *current_node);
+    virtual Tree_Node* rotate_LR(Tree_Node *current_node);
 
     /**
         Preform a left-left rotate in relation to the given node.
         @param node The node.
         @retval Tree_Node* to the new son after rotating.
     */
-    Tree_Node* rotate_LL(Tree_Node *current_node);
+    virtual Tree_Node* rotate_LL(Tree_Node *current_node);
 
     /**
         Preform a right-left rotate in relation to the given node.
         @param node The node.
         @retval Tree_Node* to the new son after rotating.
     */
-    Tree_Node* rotate_RL(Tree_Node *current_node);
+    virtual Tree_Node* rotate_RL(Tree_Node *current_node);
 
     /**
         Preform a right-right rotate in relation to the given node.
         @param node The node.
         @retval Tree_Node* to the new son after rotating.
     */
-    Tree_Node* rotate_RR(Tree_Node *current_node);
+    virtual Tree_Node* rotate_RR(Tree_Node *current_node);
 
     /**
 

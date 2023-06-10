@@ -7,20 +7,49 @@
 class Member_AVL_Tree : public AVL_Tree<Client>
 {
 
-class path_discount_Output
-{
+    class path_discount_Output
+    {
 
-    Linked_List<AVL_Tree<Client>::Tree_Node*> __path;
-    double __cumulative_discount;
+        Linked_List<AVL_Tree<Client>::Tree_Node*> __path;
+        double __cumulative_discount;
 
-public:
-    path_discount_Output(Linked_List<AVL_Tree<Client>::Tree_Node*> path, double cumulative_discount = -1) : __path(path), __cumulative_discount(cumulative_discount)
-    {}
+    public:
+        path_discount_Output(Linked_List<AVL_Tree<Client>::Tree_Node*> path, double cumulative_discount = -1) : __path(path), __cumulative_discount(cumulative_discount)
+        {}
 
-    Linked_List<AVL_Tree<Client>::Tree_Node*> get_path() const {return __path;}
+        Linked_List<AVL_Tree<Client>::Tree_Node*> get_path() const {return __path;}
 
-    double get_cumulative_discount() const {return __cumulative_discount;}
-};
+        double get_cumulative_discount() const {return __cumulative_discount;}
+    };
+
+    /**
+        Preform a left-right rotate in relation to the given node.
+        @param node The node.
+        @retval Tree_Node* to the new son after rotating.
+    */
+    Tree_Node* rotate_LR(Tree_Node *current_node) override;
+
+    /**
+        Preform a left-left rotate in relation to the given node.
+        @param node The node.
+        @retval Tree_Node* to the new son after rotating.
+    */
+    Tree_Node* rotate_LL(Tree_Node *current_node) override;
+
+    /**
+        Preform a right-left rotate in relation to the given node.
+        @param node The node.
+        @retval Tree_Node* to the new son after rotating.
+    */
+    Tree_Node* rotate_RL(Tree_Node *current_node) override;
+
+    /**
+        Preform a right-right rotate in relation to the given node.
+        @param node The node.
+        @retval Tree_Node* to the new son after rotating.
+    */
+    Tree_Node* rotate_RR(Tree_Node *current_node) override;
+
 
 public:
 
