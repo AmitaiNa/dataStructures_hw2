@@ -9,15 +9,15 @@ template <class T>
 class Custom_less
 {
     public:
-        bool operator()(const T& left, const T& right)
+        bool operator()(const T& left, const T& right) const
         {
             return left < right;
         }
-        bool operator()(int left, const T& right)
+        bool operator()(int left, const T& right) const
         {
             return left < right;
         }
-        bool operator()(const T& left, int right)
+        bool operator()(const T& left, int right) const
         {
             return left < right;
         }
