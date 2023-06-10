@@ -3,15 +3,22 @@
 
 #include "utilesWet2.h"
 #include "DS/hash_table.h"
-#include "DS/member_avl_tree.h"
+#include "DS/customer_avl_tree.h"
 #include "DS/Record_union_DB.h"
+#include "Objects/customer.h"
+#include "Objects/record.h"
 
 class RecordsCompany {
   private:
+    int __records_amount;
     Hash_table<Customer>  __customer_table;
-    Member_AVL_Tree __customer_tree;
+    Customer_AVL_Tree __customer_ptr_tree;
     Record_union_DB *__records_piles;
-    
+    Record **__records;
+
+    // exception for debugging.
+    class SHOULDNT_GET_HERE{};
+
   public:
     RecordsCompany();
     ~RecordsCompany();

@@ -2,4 +2,3 @@
 .vscode/settings.json
 .vscode/tasks.json
 DS/test_union.exe
-DS/member_avl_tree.cpp
