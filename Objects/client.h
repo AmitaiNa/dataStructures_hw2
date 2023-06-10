@@ -7,8 +7,8 @@ class Client
     int __id;
     int __phone_number;
     bool __is_member;
-    int __debt;
-    int __discount;
+    double __debt;
+    double __discount;
 
 public:
 

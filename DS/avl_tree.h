@@ -43,6 +43,7 @@ class AVL_Tree
 protected:
 
     class COMPARE_WITH_KEY_NON_ARITHMETIC{};
+    class PERFORMED_ACTION_ON_EMPTY_TREE{};
 
     Compare __compare;
     struct Tree_Node
@@ -78,7 +79,6 @@ protected:
         @retval The front will contain nullptr if the entity is not found.
         @return A list of nodes.
     */
-
     template<class U = T,class com = Compare, typename std::enable_if<has_call_operator<com, U, int>::value, bool>::type = true>
     Linked_List<Tree_Node*> traverse_by_key(int key)
     {
