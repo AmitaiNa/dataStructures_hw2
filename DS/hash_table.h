@@ -17,8 +17,6 @@ class hash_table
 
     // exception for unexpected behaviour from resize.
     class POPPED_EMPTY_TREE{};
-    // exception for failed insertion to tree.
-    class TREE_INSERTION_FAILED{};
     // exception for passing nullptr to initialize_pointer_array.
     class INVALID_ARGUMENT{};
 
@@ -35,36 +33,28 @@ class hash_table
     /**
         Doubles the size of the hash table's array.
         @exception POPPED_EMPTY_TREE - popped an empty tree.
-        @exception TREE_INSERTION_FAILED - inserted an object that already exists.
     */
     void resize()
     {
         int old_capacity = __capacity;
+        AVL_Tree<T>** old_array = __array;
         __capacity *= RESIZE_FACTOR;
-        AVL_Tree<T>** new_array = new AVL_Tree<T>*[__capacity];
-        initialize_pointer_array(new_array, __capacity);
+        __array = new AVL_Tree<T>*[__capacity];
+        initialize_pointer_array(__array, __capacity);
         for (int i = 0; i < old_capacity; ++i)
         {
-            while (__array[i] != nullptr || __array[i]->AVL_Tree<T>::get_size() != 0)
+            while (__array[i] != nullptr && __array[i]->AVL_Tree<T>::get_size() != 0)
             {
-                T* relocated_T_ptr = __array[i]->AVL_Tree<T>::pop_max(); // TODO use find_max and remove instead. remove pop_max from tree.
+                T* relocated_T_ptr = __array[i]->AVL_Tree<T>::find_max();
                 if (relocated_T_ptr == nullptr)
                 {
                     throw POPPED_EMPTY_TREE();   // shouldn't get here. popped an empty tree.
                 }
-                int new_index = get_hashed_index((int)(*relocated_T_ptr));
-                if (new_array[new_index == nullptr])    // first object to be inserted into the array cell.
-                {
-                    new_array[new_index] = new AVL_Tree();
-                }
-                if (new_array[new_index]->AVL_Tree<T>::insert(*relocated_T_ptr) == nullptr)
-                {
-                    throw TREE_INSERTION_FAILED();   // shouldn't get here. inserted an object that already exists.
-                }
-            } // TODO change implementation to use insert.
+                insert(*relocated_T_ptr);
+                __array[i]->AVL_Tree<T>::remove_by_entity(*relocated_T_ptr);
+            }
         }
-        delete[] __array;
-        __array = new_array;
+        delete[] old_array;
     }
 
     /**
@@ -119,9 +109,9 @@ public:
         @param key The key of the object to be inserted.
         @retval A pointer to the inserted object. nullptr if an object with the key already exists
     */
-    T* insert(const T& object, int key) // TODO get rid of key. use cast to int operator.
+    T* insert(const T& object)
     {
-        int hashed_index = get_hashed_index(key);
+        int hashed_index = get_hashed_index((int)object);
         if (__array[hashed_index == nullptr])   // first object to be inserted into the array cell.
         {
             __array[hashed_index] = new AVL_Tree<T>();
