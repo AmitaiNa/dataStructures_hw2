@@ -197,11 +197,26 @@ double Member_AVL_Tree::get_expenses(int id) const
     // TODO
 }
 
-
 Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_LR(Tree_Node* current_node) //current_node = A
 {
     Tree_Node* left = current_node->__left;  //save B
     Tree_Node* new_root = left->__right;    //new_root = C
+    //---new---
+        //C'=C+B+A
+        //B'+ C'= B+A  ->  B'=B+A-C'
+        //A'+ C'= A -> A'= A-C'
+        new_root->__data.set_member_discount(new_root->__data.get_member_discount() + left->__data.get_member_discount() + current_node->__data.get_member_discount());
+        left->__data.set_member_discount(left->__data.get_member_discount() + current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
+        current_node->__data.set_member_discount(current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
+        //Y'+B'+C'= Y+C+B+A  -> Y'=Y+C+B+A-B'-C'=Y-B'
+        //W'+A'+C'= W+C+B+A  -> W'=W+C+B+A-A'-C'=W-A'
+        Tree_Node* Y = new_root->__left;
+        Tree_Node* W = new_root->__right;
+        if(Y!=nullptr)
+            Y->__data.set_member_discount(Y->__data.get_member_discount() - left->__data.get_member_discount());
+        if(W!=nullptr)
+            W->__data.set_member_discount(W->__data.get_member_discount() - current_node->__data.get_member_discount());
+    //---------
     left->__right = new_root->__left;    //B->right = C->left (Y)
     new_root->__left = left;    //C->left = B
     current_node->__left = new_root->__right;   //A->left = C->right (W)
@@ -216,6 +231,15 @@ Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_LL(Tree_Node* current_node) 
 {
     Tree_Node* new_root = current_node->__left;    //new_root = B
     Tree_Node* mid = new_root->__right;  //save Y
+    //---new---
+        //B'=B+A
+        //A'+ B'= A  ->  A'=A-B'
+        new_root->__data.set_member_discount(new_root->__data.get_member_discount() + current_node->__data.get_member_discount());
+        current_node->__data.set_member_discount(current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
+        //Y'+A'+B'=Y+B+A  ->  Y'=Y+B+A-B'-A'=Y-A'
+        if(mid!=nullptr)
+            mid->__data.set_member_discount(mid->__data.get_member_discount() - current_node->__data.get_member_discount());
+    //---------
     new_root->__right = current_node;   //B->right = A
     current_node->__left = mid; //A->left = Y
     update_height(current_node);    //update a
@@ -227,6 +251,22 @@ Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_RL(Tree_Node* current_node) 
 {
     Tree_Node* right = current_node->__right;  //save B
     Tree_Node* new_root = right->__left;    //new_root = C
+    //---new---
+        //C'=C+B+A
+        //B'+ C'= B+A  ->  B'=B+A-C'
+        //A'+ C'= A -> A'= A-C'
+        new_root->__data.set_member_discount(new_root->__data.get_member_discount() + right->__data.get_member_discount() + current_node->__data.get_member_discount());
+        right->__data.set_member_discount(right->__data.get_member_discount() + current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
+        current_node->__data.set_member_discount(current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
+        //Y'+A'+C'= Y+C+B+A  -> Y'=Y+C+B+A-A'-C'=Y-A'
+        //W'+B'+C'= W+C+B+A  -> W'=W+C+B+A-B'-C'=W-B'
+        Tree_Node* Y = new_root->__left;
+        Tree_Node* W = new_root->__right;
+        if(Y!=nullptr)
+            Y->__data.set_member_discount(Y->__data.get_member_discount() - current_node->__data.get_member_discount());
+        if(W!=nullptr)
+            W->__data.set_member_discount(W->__data.get_member_discount() - right->__data.get_member_discount());
+    //---------
     right->__left = new_root->__right;    //B->left = C->right (W)
     new_root->__right = right;    //C->right = B
     current_node->__right = new_root->__left;   //A->right = C->left (Y)
@@ -241,9 +281,18 @@ Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_RR(Tree_Node* current_node) 
 {
     Tree_Node* new_root = current_node->__right;    //new_root = B
     Tree_Node* mid = new_root->__left;  //save X
+    //---new---
+        //B'=B+A
+        //A'+ B'= A  ->  A'=A-B'
+        new_root->__data.set_member_discount(new_root->__data.get_member_discount() + current_node->__data.get_member_discount());
+        current_node->__data.set_member_discount(current_node->__data.get_member_discount() - new_root->__data.get_member_discount());
+        //X'+A'+B'=X+B+A  ->  X'=X+B+A-B'-A'=X-A'
+        if(mid!=nullptr)
+            mid->__data.set_member_discount(mid->__data.get_member_discount() - current_node->__data.get_member_discount());
+    //---------
     new_root->__left = current_node;   //B->left = A
     current_node->__right = mid; //A->right = X
     update_height(current_node);    //update A
     update_height(new_root);    //update B
     return new_root;
-} 
+}
