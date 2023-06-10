@@ -8,7 +8,7 @@ double Client::get_member_discount() const
     return __discount;
 }
 
-void Client::set_member_cumulative_discount(double calculated_debt)
+void Client::set_member_cumulative_discount_compensation(double calculated_debt)
 {
     __discount = -calculated_debt;
 }

@@ -54,7 +54,7 @@ class Record_union_DB
             for(int i=0; i<number_of_Record_nodes; i++)
             {
                 __records[i] = new Record_node(i, Record_nodes_stocks[i]);    //new Record_node node
-                __groups[i] = new Group_reversed_tree(__records[i], i);    //build new tree from the Record_node node
+                __groups[i] = new Group_reversed_tree(__records[i], i);    //build new tree from the Record_node
                 __records[i]->__R_my_tree = __groups[i]; //update the root and the only Record_node node about the group tree
             }
         }
@@ -94,7 +94,7 @@ class Record_union_DB
                 current = tempNext;
             }
             *column = root->__R_my_tree->__column;
-            *height = sum + root->__height;//== __records[r_id]+root->__height after shorting routes
+            *height = sum + root->__height;//== __records[r_id]->height + root->__height after shorting routes
             return StatusType::SUCCESS ;
         }
         
@@ -106,11 +106,11 @@ class Record_union_DB
                 return StatusType::DOESNT_EXISTS;
             if(r_id1==r_id2)
                 return StatusType::FAILURE;    //TODO - check if this is the right status
-            int r_id1_group, r_id2_group, temp;
-            getPlace(r_id1, &r_id1_group, &temp);
-            getPlace(r_id2, &r_id2_group, &temp);
+            int r_id1_group, r_id2_group, placeHolder;
+            getPlace(r_id1, &r_id1_group, &placeHolder);
+            getPlace(r_id2, &r_id2_group, &placeHolder);
             if(r_id1_group == r_id2_group)
-                StatusType::FAILURE;
+                return StatusType::FAILURE;
 
             Group_reversed_tree *bigger, *smaller, *base, *top;
             base = __groups[r_id1_group];

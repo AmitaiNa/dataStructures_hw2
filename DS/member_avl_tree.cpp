@@ -36,7 +36,7 @@ AVL_Tree<Client>::Tree_Node* Member_AVL_Tree::find_lowest_common_ancestor(int id
         throw PERFORMED_ACTION_ON_EMPTY_TREE();
     }
     AVL_Tree<Client>::Tree_Node* current_node = __root;
-    while (!(current_node->__data > id1 && current_node->__data < id2) || !((current_node->__data == id1 || current_node->__data == id2)))
+    while (!((current_node->__data > id1 && current_node->__data < id2) || (current_node->__data == id1 || current_node->__data == id2)))
     {
         if (current_node->__data < id1)
         {
@@ -76,7 +76,7 @@ Client* Member_AVL_Tree::insert(const Client& client)
         __root = new Tree_Node(client); //insert to root.
         direct_ptr_to_data = &__root->__data;
         __size++;
-        direct_ptr_to_data->set_member_cumulative_discount(cumulative_discount);    // added to update the inserted member's discount.
+        direct_ptr_to_data->set_member_cumulative_discount_compensation(cumulative_discount);    // added to update the inserted member's discount.
         return direct_ptr_to_data;
     }
 
@@ -136,12 +136,12 @@ Client* Member_AVL_Tree::insert(const Client& client)
             }
             else    // father is root
                 __root = new_son;
-            direct_ptr_to_data->set_member_cumulative_discount(cumulative_discount);    // added to update the inserted member's discount.
+            direct_ptr_to_data->set_member_cumulative_discount_compensation(cumulative_discount);    // added to update the inserted member's discount.
             return direct_ptr_to_data;
         }
         update_height(current_node);
     }
-    direct_ptr_to_data->set_member_cumulative_discount(cumulative_discount);    // added to update the inserted member's discount.
+    direct_ptr_to_data->set_member_cumulative_discount_compensation(cumulative_discount);    // added to update the inserted member's discount.
     return direct_ptr_to_data;
 }
 

@@ -47,12 +47,12 @@ class hash_table
         {
             while (__array[i] != nullptr || __array[i]->AVL_Tree<T>::get_size() != 0)
             {
-                T* relocated_T_ptr = __array[i]->AVL_Tree<T>::pop_max();
+                T* relocated_T_ptr = __array[i]->AVL_Tree<T>::pop_max(); // TODO use find_max and remove instead. remove pop_max from tree.
                 if (relocated_T_ptr == nullptr)
                 {
                     throw POPPED_EMPTY_TREE();   // shouldn't get here. popped an empty tree.
                 }
-                int new_index = get_hashed_index(*relocated_T_ptr);
+                int new_index = get_hashed_index((int)(*relocated_T_ptr));
                 if (new_array[new_index == nullptr])    // first object to be inserted into the array cell.
                 {
                     new_array[new_index] = new AVL_Tree();
@@ -61,7 +61,7 @@ class hash_table
                 {
                     throw TREE_INSERTION_FAILED();   // shouldn't get here. inserted an object that already exists.
                 }
-            }
+            } // TODO change implementation to use insert.
         }
         delete[] __array;
         __array = new_array;
@@ -119,7 +119,7 @@ public:
         @param key The key of the object to be inserted.
         @retval A pointer to the inserted object. nullptr if an object with the key already exists
     */
-    T* insert(const T& object, int key)
+    T* insert(const T& object, int key) // TODO get rid of key. use cast to int operator.
     {
         int hashed_index = get_hashed_index(key);
         if (__array[hashed_index == nullptr])   // first object to be inserted into the array cell.

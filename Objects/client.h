@@ -28,7 +28,7 @@ public:
         @param calculated_discount The member's discount. calculated to maintain offset from previous member discounts.
         @details Receives the cumulative discount and sets its negative to the member's discount
     */
-    void set_member_cumulative_discount(double calculated_discount);
+    void set_member_cumulative_discount_compensation(double calculated_discount);
 
     /**
         Cast to int operator. returns the client's id.

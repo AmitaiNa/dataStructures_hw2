@@ -14,10 +14,7 @@ class path_discount_Output
     double __cumulative_discount;
 
 public:
-    path_discount_Output(Linked_List<AVL_Tree<Client>::Tree_Node*> path, double cumulative_discount) : __path(path), __cumulative_discount(cumulative_discount)
-    {}
-
-    path_discount_Output(Linked_List<AVL_Tree<Client>::Tree_Node*> path) : __path(path)
+    path_discount_Output(Linked_List<AVL_Tree<Client>::Tree_Node*> path, double cumulative_discount = -1) : __path(path), __cumulative_discount(cumulative_discount)
     {}
 
     Linked_List<AVL_Tree<Client>::Tree_Node*> get_path() const {return __path;}
