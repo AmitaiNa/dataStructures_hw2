@@ -110,7 +110,7 @@ class Record_union_DB
             getPlace(r_id1, &r_id1_group, &temp);
             getPlace(r_id2, &r_id2_group, &temp);
             if(r_id1_group == r_id2_group)
-                StatusType::FAILURE;
+                return StatusType::FAILURE;
 
             Group_reversed_tree *bigger, *smaller, *base, *top;
             base = __groups[r_id1_group];
