@@ -13,7 +13,7 @@ class Record_node
         const int __amount;
         int __height;
 
-        Group_reversed_tree* __R_my_tree;
+        Group_reversed_tree* __R_my_tree;   //will be used only for roots
 
         /**
             C'tor of the Record_node
@@ -74,12 +74,11 @@ class Record_union_DB
             
             Record_node* root = __records[r_id];
             int sum = 0;// used to update heights after shorting routes
-            while(root->__father!=nullptr)    //find the root       //TODO only root, and how to sum amounts
+            while(root->__father!=nullptr)    //find the root
             {
                 sum+=root->__height;
                 root = root->__father;
             }
-            sum-=root->__height;
 
             Record_node* current = __records[r_id];
             int toSubtract = 0;
@@ -95,7 +94,7 @@ class Record_union_DB
                 current = tempNext;
             }
             *column = root->__R_my_tree->__column;
-            *height = sum + root->__height;
+            *height = sum + root->__height;//== __records[r_id]+root->__height after shorting routes
             return StatusType::SUCCESS ;
         }
         
@@ -113,21 +112,27 @@ class Record_union_DB
             if(r_id1_group == r_id2_group)
                 StatusType::FAILURE;
 
-            Group_reversed_tree *bigger, *smaller;
-            if(__groups[r_id1_group]->__group_nodes_amount > __groups[r_id2_group]->__group_nodes_amount)
+            Group_reversed_tree *bigger, *smaller, *base, *top;
+            base = __groups[r_id1_group];
+            top = __groups[r_id2_group];
+            if(base->__group_nodes_amount >= top->__group_nodes_amount)
             {
-                bigger = __groups[r_id1_group];
-                smaller = __groups[r_id2_group];
+                bigger = base;
+                smaller = top;
+                top->__root->__height += (base->__column_height - base->__root->__height);
             }
             else
             {
-                bigger = __groups[r_id2_group];
-                smaller = __groups[r_id1_group];
+                bigger = top;
+                smaller = base;
+                top->__root->__height += base->__column_height;
+                base->__root->__height -= top->__root->__height;
             }
-
+            
             smaller->__root->__R_my_tree = nullptr; //not a root anymore
             smaller->__root->__father = bigger->__root; //connect groups
-            bigger->__group_nodes_amount += smaller->__group_nodes_amount;  //update merged size
+            bigger->__group_nodes_amount += smaller->__group_nodes_amount;  //update merged amount
+            bigger->__column_height += smaller->__column_height;    //update merged size
             __groups[smaller->__column]= nullptr;   //remove from groups array in DB
             delete smaller; //delete group
             return StatusType::SUCCESS;
