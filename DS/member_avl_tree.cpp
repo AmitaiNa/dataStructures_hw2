@@ -199,4 +199,4 @@ Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_RR(Tree_Node* current_node) 
     update_height(current_node);    //update A
     update_height(new_root);    //update B
     return new_root;
-}
+} 
