@@ -29,7 +29,7 @@ Member_AVL_Tree::path_discount_Output Member_AVL_Tree::member_traverse_by_custom
     return path_discount_Output(path);           // requested customer not found.
 }
 
-Member_AVL_Tree::Tree_Node* Member_AVL_Tree::find_lowest_common_ancestor(int id1, int id2)
+Member_AVL_Tree::Tree_Node* Member_AVL_Tree::find_lowest_common_ancestor(int id1, int id2) const
 {   
     if (__root == nullptr)
     {
@@ -76,7 +76,7 @@ Customer* Member_AVL_Tree::insert(const Customer& customer)
         __root = new Tree_Node(customer); //insert to root.
         direct_ptr_to_data = &__root->__data;
         __size++;
-        direct_ptr_to_data->set_member_cumulative_discount_compensation(cumulative_discount);    // added to update the inserted member's discount.
+        direct_ptr_to_data->set_member_discount(-cumulative_discount);    // added to update the inserted member's discount.
         return direct_ptr_to_data;
     }
 
@@ -136,18 +136,65 @@ Customer* Member_AVL_Tree::insert(const Customer& customer)
             }
             else    // father is root
                 __root = new_son;
-            direct_ptr_to_data->set_member_cumulative_discount_compensation(cumulative_discount);    // added to update the inserted member's discount.
+            direct_ptr_to_data->set_member_discount(-cumulative_discount);    // added to update the inserted member's discount.
             return direct_ptr_to_data;
         }
         update_height(current_node);
     }
-    direct_ptr_to_data->set_member_cumulative_discount_compensation(cumulative_discount);    // added to update the inserted member's discount.
+    direct_ptr_to_data->set_member_discount(-cumulative_discount);    // added to update the inserted member's discount.
     return direct_ptr_to_data;
 }
 
-void Member_AVL_Tree::give_discount(int id1, int id2, double amount)
+void Member_AVL_Tree::add_discount(int id1, int id2, double amount) const
 {
+    Member_AVL_Tree::Tree_Node* common_ancestor = find_lowest_common_ancestor(id1, id2);
+    if (common_ancestor == nullptr)
+    {
+        throw BOTH_IDS_OUT_OF_BOUNDS();   
+    }
+    common_ancestor->__data.add_discount(amount);
 
+    // right updates:
+    bool has_discount = true;
+    Member_AVL_Tree::Tree_Node* current_node = common_ancestor->__right;
+    while (current_node != nullptr)
+    {
+        if (current_node->__data == id2) // found id2
+        {
+            if (!has_discount)
+            {
+                current_node->__data.add_discount(amount);
+            }
+            if (current_node->__right != nullptr)                       // only relevant for left.
+            {
+                current_node->__right->__data.add_discount(-amount);
+            }
+            break;
+        }
+        if (current_node->__data < id2) // need to go right.
+        {
+            if (!has_discount)
+            {
+                current_node->__data.add_discount(amount);
+                has_discount = true;
+            }
+            current_node = current_node->__right;
+        }
+        else    // need to go left.
+        {
+            if (has_discount)
+            {
+                current_node->__data.add_discount(-amount);
+                has_discount = false;
+            }
+            current_node = current_node->__left;
+        }
+    }
+}
+
+double Member_AVL_Tree::get_expenses(int id) const
+{
+    // TODO
 }
 
 

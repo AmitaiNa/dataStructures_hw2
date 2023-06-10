@@ -9,6 +9,9 @@ class Member_AVL_Tree : public AVL_Tree<Customer>
 
 // exception for when the id's given to give_discount are both out of the id's in the tree.
 class BOTH_IDS_OUT_OF_BOUNDS{};
+// exception for when the member than an action is being performed upon doesn't exist.
+class NO_MEMBER_WITH_SUCH_ID{};
+
 class path_discount_Output
 {
 
@@ -79,7 +82,7 @@ public:
         @details id1 is promised to be smaller than id2
         @exception PERFORMED_ACTION_ON_EMPTY_TREE.
     */ 
-    Member_AVL_Tree::Tree_Node* find_lowest_common_ancestor(int id1, int id2);
+    Member_AVL_Tree::Tree_Node* find_lowest_common_ancestor(int id1, int id2) const;
 
     /**
 		Insert a member into the tree. call for re-balancing if necessary.
@@ -96,9 +99,16 @@ public:
         @param id2 The upper member id boundary.
         @param amount The amount of discount to give the members.
         @exception BOTH_IDS_OUT_OF_BOUNDS.
-        @details Adds the given discount to the lowest common ancestor of the given keys.
     */ 
-    void give_discount(int id1, int id2, double amount);
+    void add_discount(int id1, int id2, double amount) const;
+
+    /**
+        Gets the expenses of the given member.
+        @param id The member's id
+        @retval The member's expenses.
+        @exception NO_MEMBER_WITH_SUCH_ID.
+    */
+    double get_expenses(int id) const;
 
 };
 

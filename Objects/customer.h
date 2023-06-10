@@ -24,11 +24,22 @@ public:
     double get_member_discount() const;
 
     /**
-        Setter for the member's discount. called when inserting a member to a tree.
-        @param calculated_discount The member's discount. calculated to maintain offset from previous member discounts.
-        @details Receives the cumulative discount and sets its negative to the member's discount
+        Setter for the member's discount.
+        @param calculated_discount The amount to discount.
     */
-    void set_member_cumulative_discount_compensation(double calculated_discount);
+    void set_member_discount(double calculated_discount);
+
+    /**
+        Getter for the member's debt.
+        @retval The member's debt.
+    */
+    double get_member_debt() const;
+
+    /**
+        Add the given discount to a common ancestor.
+        @param amount The amount of discount to add.
+    */
+    void add_discount(double amount);
 
     /**
         Cast to int operator. returns the customer's id.
