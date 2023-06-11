@@ -1,19 +1,85 @@
-addCostumer 11111 12345
-addCostumer 22222 54321
-getPhone 11111
-newMonth 4 [5 10 15 20]
-makeMember 11111
-isMember 22222
-buyRecord 11111 3
-buyRecord 22222 1
-getExpenses 11111
-addPrize 1000 22222 5
-getExpenses 22222
-putOnTop 2 3
-putOnTop 1 4
-putOnTop 4 2
+addCostumer 11 0541
+addCostumer 22 0542
+addCostumer 33 0543
+addCostumer 44 0544
+addCostumer 55 0545
+newMonth 4 [1 10 20 30]
+getExpenses 11
+getExpenses 22
+getExpenses 33
+getExpenses 44
+getExpenses 55
+makeMember 11
+makeMember 22
+makeMember 33
+makeMember 44
+makeMember 55
+getExpenses 11
+getExpenses 22
+getExpenses 33
+getExpenses 44
+getExpenses 55
+addPrize 20 40 5
+getExpenses 11
+getExpenses 22
+getExpenses 33
+getExpenses 44
+getExpenses 55
+isMember 22
+makeMember 22
+isMember 22
+addPrize 30 60 10
+getExpenses 11
+getExpenses 22
+getExpenses 33
+getExpenses 44
+getExpenses 55
+buyRecord 11 0
+getExpenses 11
+getExpenses 22
+getExpenses 33
+getExpenses 44
+getExpenses 55
+buyRecord 22 0
+getExpenses 11
+getExpenses 22
+getExpenses 33
+getExpenses 44
+getExpenses 55
+addCostumer 66 0546
+getExpenses 11
+getExpenses 22
+getExpenses 33
+getExpenses 44
+getExpenses 66
+makeMember 66
+getExpenses 11
+getExpenses 22
+getExpenses 33
+getExpenses 44
+getExpenses 66
+buyRecord 66 0
+getExpenses 11
+getExpenses 22
+getExpenses 33
+getExpenses 44
+getExpenses 66
+getPlace 0
 getPlace 1
 getPlace 2
 getPlace 3
-getPlace 4
-getExpenses 33333
+putOnTop 2 1
+getPlace 0
+getPlace 1
+getPlace 2
+getPlace 3
+putOnTop 3 2
+getPlace 0
+getPlace 1
+getPlace 2
+getPlace 3
+putOnTop 1 0
+getPlace 0
+getPlace 1
+getPlace 2
+getPlace 3

@@ -43,6 +43,9 @@ class Member_less
 
 class Member_AVL_Tree : public AVL_Tree<Customer*, Member_less>
 {
+    // exception for debugging.
+    class SHOULDNT_GET_HERE{};
+    
     class path_discount_Output
     {
             Linked_List<Member_AVL_Tree::Tree_Node*> __path;
@@ -122,6 +125,11 @@ public:
         @details after insertion, need to update the inserted member's discount to be the sum of all the discounts in the members's search path.
     */ 
     Customer** insert(Customer* const &member_ptr) override;
+
+    /**
+		After Inserting a member into the tree. call for calculating the DiscountInPath and compensate
+    */ 
+    void compensateDiscountInPath(Customer *member_ptr) const;
 
     /**
 		Adds the given discount to all the members whose id is within the given boundaries.

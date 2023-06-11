@@ -84,6 +84,7 @@ StatusType RecordsCompany::makeMember(int c_id)
     customer_ptr->make_member();
     if(__member_ptr_tree.insert(customer_ptr) == nullptr)
         throw SHOULDNT_GET_HERE();
+    __member_ptr_tree.compensateDiscountInPath(customer_ptr);
     return StatusType::SUCCESS;
 }
 

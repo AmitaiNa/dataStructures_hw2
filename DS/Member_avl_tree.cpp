@@ -58,15 +58,19 @@ Member_AVL_Tree::Tree_Node* Member_AVL_Tree::find_lowest_common_ancestor(int c_i
     return current_node;
 }
 
+void Member_AVL_Tree::compensateDiscountInPath(Customer *member_ptr) const
+{
+    member_ptr->set_member_discount_component(-(traverse_by_member(member_ptr).get_cumulative_discount()));    // set to compensate the discount in the path
+}
+
 Customer** Member_AVL_Tree::insert(Customer* const &member_ptr)
 {
-    path_discount_Output path_discount = traverse_by_member(member_ptr);            //
-    Linked_List<Member_AVL_Tree::Tree_Node*> path = path_discount.get_path();         //  added usage of path_discount_Output tuple.
-    double cumulative_discount = path_discount.get_cumulative_discount();              //
+    Linked_List<Tree_Node*> path = traverse_by_member(member_ptr).get_path();
+    
     Member_AVL_Tree::Tree_Node* current_node = path.pop_front();
     if (current_node != nullptr) // the member_ptr already exists in the tree.
     {
-        return nullptr;
+        throw SHOULDNT_GET_HERE{};
     }
 
     // the member_ptr needs to be inserted:
@@ -76,7 +80,6 @@ Customer** Member_AVL_Tree::insert(Customer* const &member_ptr)
         __root = new Tree_Node(member_ptr); //insert to root.
         direct_ptr_to_data = &__root->__data;
         __size++;
-        (*direct_ptr_to_data)->set_member_discount_component(-cumulative_discount);    // added to update the inserted member's discount.
         return direct_ptr_to_data;
     }
 
@@ -136,12 +139,10 @@ Customer** Member_AVL_Tree::insert(Customer* const &member_ptr)
             }
             else    // father is root
                 __root = new_son;
-            (*direct_ptr_to_data)->set_member_discount_component(-cumulative_discount);    // added to update the inserted member's discount.
             return direct_ptr_to_data;
         }
         update_height(current_node);
     }
-    (*direct_ptr_to_data)->set_member_discount_component(-cumulative_discount);    // added to update the inserted member's discount.
     return direct_ptr_to_data;
 }
 
@@ -223,13 +224,13 @@ void Member_AVL_Tree::add_discount(int c_id1, int c_id2, double amount) const
 
 double Member_AVL_Tree::get_expenses(Customer member) const
 {
-    path_discount_Output path_discount = traverse_by_member(&member);
-    Tree_Node* target = path_discount.get_path().front();
+    path_discount_Output path_and_discount = traverse_by_member(&member);
+    Tree_Node* target = path_and_discount.get_path().front();
     if (target == nullptr || !(target->__data)->get_is_member())
     {
         throw NO_MEMBER_WITH_SUCH_ID();
     }
-    return target->__data->get_member_debt() - path_discount.get_cumulative_discount();
+    return target->__data->get_member_debt() - path_and_discount.get_cumulative_discount();
 }
 
 Member_AVL_Tree::Tree_Node* Member_AVL_Tree::rotate_LR(Tree_Node* current_node) //current_node = A
