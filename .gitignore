@@ -5,3 +5,4 @@ mainWet2.exe
 mainWet2.o
 record.o
 recordsCompany.o
+Member_avl_tree.o

@@ -33,7 +33,7 @@ Member_AVL_Tree::Tree_Node* Member_AVL_Tree::find_lowest_common_ancestor(int c_i
 {   
     if (__root == nullptr)
     {
-        throw PERFORMED_ACTION_ON_EMPTY_TREE();
+        return nullptr;
     }
     Tree_Node* current_node = __root;
     while (!((*(current_node->__data) > c_id1 && *(current_node->__data) < c_id2) || (*(current_node->__data) == c_id1 || *(current_node->__data) == c_id2)))

@@ -1,17 +1,17 @@
-addCostumer 45115 1108
-addCostumer 18904 94069
-getPhone 18904
-newMonth 40 [19 16 5 10 5 2 9 5 8 9 15 8 8 8 11 14 4 19 9 16 2 11 3 6 7 4 17 10 11 4 17 12 7 3 6 4 5 1 5 4]
-makeMember 18904
-isMember 45115
-makeMember 45115
-buyRecord 18904 32
-buyRecord 45115 5
-getExpenses 18904
-addPrize 28543 50000 45
-getExpenses 45115
-putOnTop 3 28
-putOnTop 28 37
+addCostumer 12345 98765
+addCostumer 67890 54321
+getPhone 12345
+newMonth 5 [10 20 30 40 50]
+makeMember 12345
+isMember 67890
+buyRecord 12345 3
+buyRecord 67890 2
+getExpenses 12345
+addPrize 2000 67890 25
+getExpenses 67890
+putOnTop 2 4
+putOnTop 3 1
+getPlace 2
 getPlace 3
-getPlace 28
-getPlace 37
+getPlace 4
+getExpenses 67890

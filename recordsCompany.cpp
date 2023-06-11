@@ -74,16 +74,9 @@ StatusType RecordsCompany::makeMember(int c_id)
     {
         return StatusType::INVALID_INPUT;
     }
-    Customer** customer_ptr_ptr = __member_ptr_tree.find(c_id);
-    if (customer_ptr_ptr == nullptr)
-    {
+    Customer* customer_ptr = __customer_table.find(c_id);
+    if(customer_ptr==nullptr)
         return StatusType::DOESNT_EXISTS;
-    }
-    if (*customer_ptr_ptr == nullptr)
-    {
-        throw SHOULDNT_GET_HERE(); // sanity check.
-    }
-    Customer* customer_ptr = *customer_ptr_ptr;
     if (customer_ptr->get_is_member())
     {
         return StatusType::ALREADY_EXISTS;
