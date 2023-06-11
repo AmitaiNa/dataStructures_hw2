@@ -3,7 +3,7 @@
 
 class Record
 {
-    const int __id;
+    const int __c_id;
     int __purchases;
     int __stock_amount;
 

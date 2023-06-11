@@ -4,9 +4,9 @@
 class Customer
 {
 
-    const int __id;
+    const int __c_id;
     const int __phone_number;
-    bool __get_is_member;
+    bool __is_member;
     double __debt;
     double __discount_component;
 
@@ -21,13 +21,13 @@ public:
         Getter for the member's discount.
         @retval The member's discount.
     */
-    double get_discount_component() const;
+    double get_member_discount_component() const;
 
     /**
         Setter for the member's discount.
         @param calculated_discount The amount to discount. will be replaced.
     */
-    void set_discount_component(double calculated_discount);
+    void set_member_discount_component(double calculated_discount);
 
     /**
         Getter for the member's debt.

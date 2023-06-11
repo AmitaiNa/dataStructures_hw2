@@ -1,14 +1,14 @@
 #include "customer.h"
 
-Customer::Customer(int id, int phone_number) : __id(id), __phone_number(phone_number), __get_is_member(false), __debt(0), __discount_component(0)
+Customer::Customer(int id, int phone_number) : __c_id(id), __phone_number(phone_number), __is_member(false), __debt(0), __discount_component(0)
 {}
 
-double Customer::get_discount_component() const
+double Customer::get_member_discount_component() const
 {
     return __discount_component;
 }
 
-void Customer::set_discount_component(double calculated_debt)
+void Customer::set_member_discount_component(double calculated_debt)
 {
     __discount_component = calculated_debt;
 }
@@ -30,12 +30,12 @@ void Customer::add_discount(double amount)
 
 bool Customer::get_is_member() const
 {
-    return __get_is_member;
+    return __is_member;
 }
 
 void Customer::make_member()
 {
-    __get_is_member = true;
+    __is_member = true;
 }
 
 int Customer::get_phone() const
@@ -45,5 +45,5 @@ int Customer::get_phone() const
 
 Customer::operator int() const
 {
-    return __id;
+    return __c_id;
 }

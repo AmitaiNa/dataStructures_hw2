@@ -105,7 +105,7 @@ class Record_union_DB
             if(r_id1>=__records_amount || r_id2>=__records_amount)
                 return StatusType::DOESNT_EXISTS;
             if(r_id1==r_id2)
-                return StatusType::FAILURE;    //TODO - check if this is the right status
+                return StatusType::FAILURE;    //TODO - check if this is the right status @piazza @317
             int r_id1_group, r_id2_group, placeHolder;
             getPlace(r_id1, &r_id1_group, &placeHolder);
             getPlace(r_id2, &r_id2_group, &placeHolder);

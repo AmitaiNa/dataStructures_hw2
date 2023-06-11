@@ -10,7 +10,7 @@ RecordsCompany::~RecordsCompany()
     if(__records!=nullptr)
         delete[] __records;
 }
-//TODO - do nothing if newmonth....
+
 StatusType RecordsCompany::newMonth(int *records_stocks, int number_of_records)
 {
     if(number_of_records<0)
@@ -21,7 +21,7 @@ StatusType RecordsCompany::newMonth(int *records_stocks, int number_of_records)
             delete __records_piles;
         if(__records!=nullptr)
             delete[] __records;
-        __customer_ptr_tree.reset_debt();
+        __member_ptr_tree.reset_debt();
         __records_amount = number_of_records;
         __records_piles = new Record_union_DB(records_stocks,number_of_records);
         __records = new Record*[number_of_records];
@@ -46,8 +46,6 @@ StatusType RecordsCompany::addCostumer(int c_id, int phone)
         Customer *newCustomerPTR = __customer_table.insert(Customer(c_id, phone));
         if(newCustomerPTR==nullptr)
             return StatusType::ALREADY_EXISTS;
-        if(__customer_ptr_tree.insert(newCustomerPTR)==nullptr)
-            throw SHOULDNT_GET_HERE();
         return StatusType::SUCCESS;
     }
     catch(...)
@@ -76,7 +74,7 @@ StatusType RecordsCompany::makeMember(int c_id)
     {
         return StatusType::INVALID_INPUT;
     }
-    Customer** customer_ptr_ptr = __customer_ptr_tree.find(c_id);
+    Customer** customer_ptr_ptr = __member_ptr_tree.find(c_id);
     if (customer_ptr_ptr == nullptr)
     {
         return StatusType::DOESNT_EXISTS;
@@ -91,6 +89,8 @@ StatusType RecordsCompany::makeMember(int c_id)
         return StatusType::ALREADY_EXISTS;
     }
     customer_ptr->make_member();
+    if(__member_ptr_tree.insert(customer_ptr) == nullptr)
+        throw SHOULDNT_GET_HERE();
     return StatusType::SUCCESS;
 }
 
@@ -114,16 +114,11 @@ StatusType RecordsCompany::buyRecord(int c_id, int r_id)
     {
         return StatusType::INVALID_INPUT;
     }
-    Customer** customer_ptr_ptr = __customer_ptr_tree.find(c_id);
-    if (customer_ptr_ptr == nullptr || r_id >= __records_amount)
+    Customer* customer_ptr = __customer_table.find(c_id);
+    if (customer_ptr == nullptr || r_id >= __records_amount)
     {
         return StatusType::DOESNT_EXISTS;
     }
-    if (*customer_ptr_ptr == nullptr)
-    {
-        throw SHOULDNT_GET_HERE(); // sanity check.
-    }
-    Customer* customer_ptr = *customer_ptr_ptr;
     int cost = __records[r_id]->purchase();
     if (customer_ptr->get_is_member())
     {
@@ -138,19 +133,15 @@ StatusType RecordsCompany::addPrize(int c_id1, int c_id2, double  amount)
     {
         return StatusType::INVALID_INPUT;
     }
-    if (c_id1 == c_id2)
-    {
-        return StatusType::SUCCESS;
-    }
     try
     {
-        __customer_ptr_tree.add_discount(c_id1, c_id2, amount);
+        __member_ptr_tree.add_discount(c_id1, c_id2, amount);
     }
-    catch(const Customer_AVL_Tree::BOTH_IDS_OUT_OF_BOUNDS&)
+    catch(const Member_AVL_Tree::NO_ACTION_PERFORMED&)
     {
-        // TODO piazza @336
+        return StatusType::SUCCESS; // no action was performed.
     }
-    return StatusType::SUCCESS;
+    return StatusType::SUCCESS; // successful operation.
 }
 
 Output_t<double> RecordsCompany::getExpenses(int c_id)
@@ -162,9 +153,9 @@ Output_t<double> RecordsCompany::getExpenses(int c_id)
     double expenses;
     try
     {
-        expenses = __customer_ptr_tree.get_expenses(Customer(c_id));
+        expenses = __member_ptr_tree.get_expenses(Customer(c_id));
     }
-    catch(const Customer_AVL_Tree::NO_MEMBER_WITH_SUCH_ID&)
+    catch(const Member_AVL_Tree::NO_MEMBER_WITH_SUCH_ID&)
     {
         return StatusType::DOESNT_EXISTS;
     }
