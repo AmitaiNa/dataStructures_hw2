@@ -51,18 +51,21 @@ getExpenses 11
 getExpenses 22
 getExpenses 33
 getExpenses 44
+getExpenses 55
 getExpenses 66
 makeMember 66
 getExpenses 11
 getExpenses 22
 getExpenses 33
 getExpenses 44
+getExpenses 55
 getExpenses 66
 buyRecord 66 0
 getExpenses 11
 getExpenses 22
 getExpenses 33
 getExpenses 44
+getExpenses 55
 getExpenses 66
 getPlace 0
 getPlace 1

@@ -51,17 +51,20 @@ getExpenses: 100
 getExpenses: 96
 getExpenses: -15
 getExpenses: -10
+getExpenses: -10
 getExpenses: DOESNT_EXISTS
 makeMember: SUCCESS
 getExpenses: 100
 getExpenses: 96
 getExpenses: -15
 getExpenses: -10
+getExpenses: -10
 getExpenses: 0
 buyRecord: SUCCESS
 getExpenses: 100
 getExpenses: 96
 getExpenses: -15
+getExpenses: -10
 getExpenses: -10
 getExpenses: 102
 getPlace: column=0, hight=0
