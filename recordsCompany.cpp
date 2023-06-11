@@ -8,7 +8,13 @@ RecordsCompany::~RecordsCompany()
     if(__records_piles!=nullptr)
         delete __records_piles;
     if(__records!=nullptr)
+    {
+        for (int i = 0; i < __records_amount; ++i)
+        {
+            delete __records[i];
+        }
         delete[] __records;
+    }
 }
 
 StatusType RecordsCompany::newMonth(int *records_stocks, int number_of_records)
@@ -20,7 +26,13 @@ StatusType RecordsCompany::newMonth(int *records_stocks, int number_of_records)
         if(__records_piles!=nullptr)
             delete __records_piles;
         if(__records!=nullptr)
+        {
+            for (int i = 0; i < __records_amount; ++i)
+            {
+                delete __records[i];
+            }
             delete[] __records;
+        }
         __member_ptr_tree.reset_debt();
         __records_amount = number_of_records;
         __records_piles = new Record_union_DB(records_stocks,number_of_records);

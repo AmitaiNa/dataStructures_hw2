@@ -61,6 +61,11 @@ class Record_union_DB
 
         ~Record_union_DB()
         {
+            for (int i = 0; i < __records_amount; ++i)
+            {
+                delete __records[i];
+                delete __groups[i];
+            }
             delete[] __records;
             delete[] __groups;
         }
