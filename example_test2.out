@@ -1,18 +1,19 @@
-addCostumer: SUCCESS
-addCostumer: SUCCESS
+addCustomer: SUCCESS
+addCustomer: SUCCESS
 getPhone: 12345
 newMonth: SUCCESS
 makeMember: SUCCESS
 isMember: False
 buyRecord: SUCCESS
-buyRecord: DOESNT_EXISTS
-getExpenses: 100
+buyRecord: SUCCESS
+getExpenses: 40
 addPrize: SUCCESS
 getExpenses: DOESNT_EXISTS
 putOnTop: SUCCESS
 putOnTop: SUCCESS
 putOnTop: SUCCESS
-getPlace: column=1, hight=15
-getPlace: column=2, hight=5
+getPlace: column=1, hight=20
+getPlace: column=2, hight=15
 getPlace: column=3, hight=10
+getPlace: column=4, hight=5
 getExpenses: DOESNT_EXISTS

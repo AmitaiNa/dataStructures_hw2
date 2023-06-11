@@ -24,9 +24,14 @@ public:
      Linked_List();
 
      /**
+          Copy C'tor of the linked list
+     */
+     Linked_List(const Linked_List<T> &other);
+
+     /**
                D'tor of the linked list
      */
-      ~Linked_List();
+     ~Linked_List();
 
      /**
                operator=
@@ -91,6 +96,26 @@ void Linked_List<T>::destroy_nodes()
      }
      __length=0;
      __head=nullptr;
+}
+
+template<class T>
+Linked_List<T>::Linked_List(const Linked_List<T> &other)
+{
+     __head=nullptr;
+     __length=0;
+     Linked_List<T> temp_stack;
+     List_Node* head = other.__head;
+     while(head!=nullptr)
+     {
+          temp_stack.push_front(head->__data);
+          head = head->__next;
+     }
+     head = temp_stack.__head;
+     while(head!=nullptr)
+     {
+          push_front(head->__data);
+          head = head->__next;
+     }
 }
 
 template<class T>

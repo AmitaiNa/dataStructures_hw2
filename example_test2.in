@@ -1,18 +1,19 @@
 addCostumer 11111 12345
 addCostumer 22222 54321
 getPhone 11111
-newMonth 3 [5 10 15]
+newMonth 4 [5 10 15 20]
 makeMember 11111
 isMember 22222
-buyRecord 11111 2
-buyRecord 22222 2
+buyRecord 11111 3
+buyRecord 22222 1
 getExpenses 11111
-addPrize 5000 22222 10
+addPrize 1000 22222 5
 getExpenses 22222
-putOnTop 1 2
-putOnTop 1 3
-putOnTop 2 1
+putOnTop 2 3
+putOnTop 1 4
+putOnTop 4 2
 getPlace 1
 getPlace 2
 getPlace 3
+getPlace 4
 getExpenses 33333
