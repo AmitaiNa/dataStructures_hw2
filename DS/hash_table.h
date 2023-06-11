@@ -43,15 +43,15 @@ class Hash_table
         initialize_pointer_array(__array, __capacity);
         for (int i = 0; i < old_capacity; ++i)
         {
-            while (__array[i] != nullptr && __array[i]->get_size() != 0)
+            while (old_array[i] != nullptr && old_array[i]->get_size() != 0)
             {
-                T* relocated_T_ptr = __array[i]->find_max();
+                T* relocated_T_ptr = old_array[i]->find_max();
                 if (relocated_T_ptr == nullptr)
                 {
                     throw POPPED_EMPTY_TREE();   // shouldn't get here. popped an empty tree.
                 }
                 insert(*relocated_T_ptr);
-                __array[i]->remove_by_entity(*relocated_T_ptr);
+                old_array[i]->remove_by_entity(*relocated_T_ptr);
             }
         }
         delete[] old_array;

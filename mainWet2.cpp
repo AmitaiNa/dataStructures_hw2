@@ -22,7 +22,7 @@ int main()
 {
 
     //-------redirecting input------
-      std::ifstream input_file("example_test2.in"); // open file
+      std::ifstream input_file("example_test.in"); // open file
 
       if (input_file.is_open()) { // check if file is open
           std::cin.rdbuf(input_file.rdbuf()); // redirect input from file to cin
@@ -32,7 +32,7 @@ int main()
     //-----------------------------
 
     //-------redirecting output------
-      std::ofstream out("example_test2.res");
+      std::ofstream out("example_test.res");
       std::streambuf* coutbuf = std::cout.rdbuf();
       std::cout.rdbuf(out.rdbuf());
     //-----------------------------
