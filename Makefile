@@ -27,3 +27,8 @@ recordsCompany.o: recordsCompany.cpp utilesWet2.h DS/hash_table.h DS/customer_av
 clean:
 	del /f $(OBJS) $(OUT).exe
 #	mingw32-make
+
+
+#powershell commands:
+#Get-Content .\example_test.in | .\mainWet2.exe > .\example_test.res
+#Get-Content .\example_test.in | .\mainWet2.exe | tee .\example_test.res
