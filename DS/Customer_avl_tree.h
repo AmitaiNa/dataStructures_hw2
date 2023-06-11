@@ -4,9 +4,45 @@
 #include "avl_tree.h"
 #include "../Objects/customer.h"
 
-class Customer_AVL_Tree : public AVL_Tree<Customer*>
+class Customer_less
 {
+    public:
+        bool operator()(Customer* const &left, Customer* const &right) const
+        {
+            return *left < *right;
+        }
+        bool operator()(const int key, Customer* const &right) const
+        {
+            return key < *right;
+        }
+        bool operator()(Customer* const &left, const int key) const
+        {
+            return *left < key;
+        }
+        bool operator()(const Customer& left, const Customer& right) const
+        {
+            return left < right;
+        }
+        bool operator()(const int key, const Customer& right) const
+        {
+            return key < right;
+        }
+        bool operator()(const Customer& left, const int key) const
+        {
+            return left < key;
+        }
+        bool operator()(const Customer& left, Customer* const &right) const
+        {
+            return left < *right;
+        }
+        bool operator()(Customer* const &left, const Customer& right) const
+        {
+            return *left < right;
+        }
+};
 
+class Customer_AVL_Tree : public AVL_Tree<Customer*, Customer_less>
+{
     class path_discount_Output
     {
             Linked_List<Customer_AVL_Tree::Tree_Node*> __path;
@@ -112,7 +148,7 @@ public:
         @retval The member's expenses.
         @exception NO_MEMBER_WITH_SUCH_ID.
     */
-    double get_expenses(Customer& customer) const;
+    double get_expenses(Customer customer) const;
 
     // exception for when the id's given to give_discount are both out of the id's in the tree.
     class BOTH_IDS_OUT_OF_BOUNDS{};

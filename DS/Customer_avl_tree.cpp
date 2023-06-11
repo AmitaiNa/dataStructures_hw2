@@ -1,6 +1,6 @@
 #include "Customer_avl_tree.h"
 
-Customer_AVL_Tree::Customer_AVL_Tree() : AVL_Tree<Customer*>()
+Customer_AVL_Tree::Customer_AVL_Tree() : AVL_Tree<Customer*, Customer_less>()
 {}
 
 Customer_AVL_Tree::path_discount_Output Customer_AVL_Tree::traverse_by_customer(Customer *customer_ptr) const
@@ -243,7 +243,7 @@ void Customer_AVL_Tree::add_discount(int id1, int id2, double amount) const
     }
 }
 
-double Customer_AVL_Tree::get_expenses(Customer& customer) const
+double Customer_AVL_Tree::get_expenses(Customer customer) const
 {
     path_discount_Output path_discount = traverse_by_customer(&customer);
     Tree_Node* target = path_discount.get_path().front();

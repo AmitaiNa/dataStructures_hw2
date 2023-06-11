@@ -6,14 +6,14 @@
 template <class T>
 class Hash_table
 {
+    const int INITIAL_HT_CAPACITY = 8;
+    const double MAX_LOAD_FACTOR = 0.75; // when the hash table's load factor gets bigger than the max, the table gets resized.
+    const int RESIZE_FACTOR = 2; // the factor by which to scale the array when resizing.
 
     AVL_Tree<T>** __array;
     int __size;     // total number of objects in the HT.
     int __capacity;     // maximum capacity of the array.
 
-    const int INITIAL_HT_CAPACITY = 8;
-    const double MAX_LOAD_FACTOR = 0.75; // when the hash table's load factor gets bigger than the max, the table gets resized.
-    const int RESIZE_FACTOR = 2; // the factor by which to scale the array when resizing.
 
     // exception for unexpected behaviour from resize.
     class POPPED_EMPTY_TREE{};
@@ -43,15 +43,15 @@ class Hash_table
         initialize_pointer_array(__array, __capacity);
         for (int i = 0; i < old_capacity; ++i)
         {
-            while (__array[i] != nullptr && __array[i]->AVL_Tree<T>::get_size() != 0)
+            while (__array[i] != nullptr && __array[i]->get_size() != 0)
             {
-                T* relocated_T_ptr = __array[i]->AVL_Tree<T>::find_max();
+                T* relocated_T_ptr = __array[i]->find_max();
                 if (relocated_T_ptr == nullptr)
                 {
                     throw POPPED_EMPTY_TREE();   // shouldn't get here. popped an empty tree.
                 }
                 insert(*relocated_T_ptr);
-                __array[i]->AVL_Tree<T>::remove_by_entity(*relocated_T_ptr);
+                __array[i]->remove_by_entity(*relocated_T_ptr);
             }
         }
         delete[] old_array;
@@ -63,9 +63,9 @@ class Hash_table
         @param size The size of the given array.
         @exception INVALID_ARGUMENT - received nullptr in array.
     */
-    void initialize_pointer_array(void* array, int size)
+    void initialize_pointer_array(AVL_Tree<T>** array, int size)
     {
-        if (array = nullptr)
+        if (array == nullptr)
         {
             throw INVALID_ARGUMENT();   // shouldn't get here. received nullptr in array.
         }
@@ -100,7 +100,7 @@ public:
     */
     T* find(int key) const
     {
-        return __array[get_hashed_index(key)].AVL_Tree<T>::find(key);
+        return __array[get_hashed_index(key)]->find(key);
     }
 
     /**
@@ -112,11 +112,11 @@ public:
     T* insert(const T& object)
     {
         int hashed_index = get_hashed_index((int)object);
-        if (__array[hashed_index == nullptr])   // first object to be inserted into the array cell.
+        if (__array[hashed_index] == nullptr)   // first object to be inserted into the array cell.
         {
             __array[hashed_index] = new AVL_Tree<T>();
         }
-        T* retval = __array[hashed_index].AVL_Tree<T>::insert(object);
+        T* retval = __array[hashed_index]->insert(object);
         if (retval == nullptr)     // key already exists.
         {
             return nullptr;
