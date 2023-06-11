@@ -90,6 +90,13 @@ public:
     */
     ~Hash_table()
     {
+        for (int i = 0; i < __capacity; ++i)
+        {
+            if (__array[i] != nullptr)
+            {
+                delete __array[i];
+            }
+        }
         delete[] __array;
     }
 
