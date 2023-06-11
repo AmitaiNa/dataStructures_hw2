@@ -113,8 +113,8 @@ class Record_union_DB
                 return StatusType::FAILURE;
 
             Group_reversed_tree *bigger, *smaller, *base, *top;
-            base = __groups[r_id1_group];
-            top = __groups[r_id2_group];
+            top = __groups[r_id1_group];
+            base = __groups[r_id2_group];
             if(base->__group_nodes_amount >= top->__group_nodes_amount)
             {
                 bigger = base;
@@ -131,10 +131,12 @@ class Record_union_DB
             
             smaller->__root->__R_my_tree = nullptr; //not a root anymore
             smaller->__root->__father = bigger->__root; //connect groups
-            bigger->__group_nodes_amount += smaller->__group_nodes_amount;  //update merged amount
-            bigger->__column_height += smaller->__column_height;    //update merged size
-            __groups[smaller->__column]= nullptr;   //remove from groups array in DB
-            delete smaller; //delete group
+            bigger->__root->__R_my_tree = base; //make sure the root points to the right group.
+
+            base->__group_nodes_amount += top->__group_nodes_amount;  //update merged amount
+            base->__column_height += top->__column_height;    //update merged size
+            __groups[top->__column]= nullptr;   //remove from groups array in DB
+            delete top; //delete group
             return StatusType::SUCCESS;
         }
 

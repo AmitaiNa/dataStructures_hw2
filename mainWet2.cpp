@@ -3,7 +3,10 @@
 #include <string>
 #include <iostream>
 #include <vector>
-
+//----
+#include <fstream>
+#include <sstream>
+//----
 using namespace std;
 
 void print(string cmd, StatusType res);
@@ -17,11 +20,53 @@ vector<int> getRecordsStocks();
 
 int main()
 {
+
+    //-------redirecting input------
+      std::ifstream input_file("example_test2.in"); // open file
+
+      if (input_file.is_open()) { // check if file is open
+          std::cin.rdbuf(input_file.rdbuf()); // redirect input from file to cin
+      }
+      else
+          cout<<"Error reading file"<<endl;
+    //-----------------------------
+
+    //-------redirecting output------
+      std::ofstream out("example_test2.res");
+      std::streambuf* coutbuf = std::cout.rdbuf();
+      std::cout.rdbuf(out.rdbuf());
+    //-----------------------------
+
+
   string op;
   RecordsCompany *test_obj = new RecordsCompany();
   while (cin >> op)
   {
     
+    //-------peek line------
+
+      // std::string peeked_line;
+      // std::stringstream line_stream;
+
+      // // Read a line from cin into a string
+      // std::getline(std::cin, peeked_line);
+
+      // // Put the string into a stringstream
+      // line_stream << peeked_line;
+      // if(!(line_stream >> op))
+      //     break;
+
+    //-----------------------------
+    //------break-----
+      //int testcond=10;
+      //if(peeked_line.find("rate_movie 44579 2772 35") != std::string::npos)
+      // {
+      //     a=5;
+      //     if(a==7)
+      //         break;
+      // }
+    //---------------
+
     // check operation
     if (!op.compare("newMonth"))
     {
@@ -114,6 +159,11 @@ int main()
     }
   }
   delete test_obj;
+
+  //-----Restore cout to its original output stream-----
+    std::cout.rdbuf(coutbuf);
+  //-------------------------
+
   return 0;
 }
 
