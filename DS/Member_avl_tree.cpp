@@ -26,7 +26,7 @@ Member_AVL_Tree::path_discount_Output Member_AVL_Tree::traverse_by_member(Custom
         }
     }
     path.push_front(current_node);               //
-    return path_discount_Output(path);           // requested member not found.
+    return path_discount_Output(path, 0);           // requested member not found.
 }
 
 Member_AVL_Tree::Tree_Node* Member_AVL_Tree::find_lowest_common_ancestor(int c_id1, int c_id2) const
