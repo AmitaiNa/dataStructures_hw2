@@ -2,7 +2,7 @@
 #define MEMBER_AVL_TREE
 
 #include "avl_tree.h"
-#include "customer.h"
+#include "../Objects/customer.h"
 
 class Customer_AVL_Tree : public AVL_Tree<Customer*>
 {
