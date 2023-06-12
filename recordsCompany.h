@@ -2,11 +2,11 @@
 #define RECORDS_COMPANY_H
 
 #include "utilesWet2.h"
-#include "DS/hash_table.h"
-#include "DS/Member_avl_tree.h"
-#include "DS/Record_union_DB.h"
-#include "Objects/customer.h"
-#include "Objects/record.h"
+#include "hash_table.h"
+#include "Member_avl_tree.h"
+#include "Record_union_DB.h"
+#include "customer.h"
+#include "record.h"
 
 class RecordsCompany {
   private:

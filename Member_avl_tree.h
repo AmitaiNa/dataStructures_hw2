@@ -2,7 +2,7 @@
 #define MEMBER_AVL_TREE
 
 #include "avl_tree.h"
-#include "../Objects/customer.h"
+#include "customer.h"
 
 class Member_less
 {
