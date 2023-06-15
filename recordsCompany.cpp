@@ -55,9 +55,12 @@ StatusType RecordsCompany::addCostumer(int c_id, int phone)
         return StatusType::INVALID_INPUT;
     try
     {
-        Customer *newCustomerPTR = __customer_table.insert(Customer(c_id, phone));
-        if(newCustomerPTR==nullptr)
+        Customer* new_customer = new Customer(c_id, phone);
+        if(! __customer_table.insert(new_customer))
+        {
+            delete new_customer;
             return StatusType::ALREADY_EXISTS;
+        }
         return StatusType::SUCCESS;
     }
     catch(...)
@@ -96,7 +99,6 @@ StatusType RecordsCompany::makeMember(int c_id)
     customer_ptr->make_member();
     if(__member_ptr_tree.insert(customer_ptr) == nullptr)
         throw SHOULDNT_GET_HERE();
-    __member_ptr_tree.compensateDiscountInPath(customer_ptr);
     return StatusType::SUCCESS;
 }
 
