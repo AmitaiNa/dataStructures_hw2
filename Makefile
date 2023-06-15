@@ -10,16 +10,16 @@ all: $(OBJS)
 mainWet2.o: mainWet2.cpp utilesWet2.h recordsCompany.h
 	$(CC) $(FLAGS) mainWet2.cpp
 
-Member_avl_tree.o: DS/Member_avl_tree.cpp DS/avl_tree.h Objects/customer.h
-	$(CC) $(FLAGS) DS/Member_avl_tree.cpp
+Member_avl_tree.o: Member_avl_tree.cpp avl_tree.h customer.h
+	$(CC) $(FLAGS) Member_avl_tree.cpp
 
-customer.o: Objects/customer.cpp
-	$(CC) $(FLAGS) Objects/customer.cpp
+customer.o: customer.cpp
+	$(CC) $(FLAGS) customer.cpp
 
-record.o: Objects/record.cpp
-	$(CC) $(FLAGS) Objects/record.cpp
+record.o: record.cpp
+	$(CC) $(FLAGS) record.cpp
 
-recordsCompany.o: recordsCompany.cpp utilesWet2.h DS/hash_table.h DS/Member_avl_tree.h DS/Record_union_DB.h Objects/customer.h Objects/record.h
+recordsCompany.o: recordsCompany.cpp utilesWet2.h hash_table.h Member_avl_tree.h Record_union_DB.h customer.h record.h
 	$(CC) $(FLAGS) recordsCompany.cpp
 
 

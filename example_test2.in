@@ -3,22 +3,42 @@ addCostumer 22 0542
 addCostumer 33 0543
 addCostumer 44 0544
 addCostumer 55 0545
+addCostumer 66 0541
+addCostumer 77 0542
+addCostumer 88 0543
+addCostumer 99 0544
+addCostumer 100 0545
 newMonth 4 [1 10 20 30]
 getExpenses 11
 getExpenses 22
 getExpenses 33
 getExpenses 44
 getExpenses 55
+getExpenses 66
+getExpenses 77
+getExpenses 88
+getExpenses 99
+getExpenses 100
 makeMember 11
 makeMember 22
 makeMember 33
 makeMember 44
 makeMember 55
+makeMember 66
+makeMember 77
+makeMember 88
+makeMember 99
+makeMember 100
 getExpenses 11
 getExpenses 22
 getExpenses 33
 getExpenses 44
 getExpenses 55
+getExpenses 66
+getExpenses 77
+getExpenses 88
+getExpenses 99
+getExpenses 100
 addPrize 20 40 5
 getExpenses 11
 getExpenses 22
